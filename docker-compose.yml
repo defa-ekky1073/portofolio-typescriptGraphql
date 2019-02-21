@@ -1,0 +1,24 @@
+version: '2'
+services:
+  api:
+    build: .
+    links:
+      - db:db.docker
+    depends_on:
+      - db
+    ports:
+      - "8585:3030"
+    environment:
+      MASTER_USER: root
+      MASTER_HOST: db.docker
+  db:
+    image: mariadb
+    ports:
+      - 3306:3306
+    expose:
+      - 3306
+    volumes:
+      - ./test/db/master.sql:/docker-entrypoint-initdb.d/master.sql:ro
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+  

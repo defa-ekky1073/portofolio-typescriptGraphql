@@ -1,0 +1,28 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2017",
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "lib": [
+      "dom",
+      "es2017",
+      "esnext.asynciterable"
+    ],
+    "sourceMap": true,
+    "rootDir": "specs",
+    "outDir": "build",
+    "baseUrl": ".",
+    "typeRoots": [
+      "../node_modules/@types",
+      "specs/@types",
+    ]
+  },
+  "exclude": [
+    "../node_modules",
+    "build"
+  ]
+}
