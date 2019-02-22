@@ -18,7 +18,7 @@ export interface Config {
         DIALECT: string;
         LOGGING: boolean;
     };
-    LOG_LEVEL: LogLevel;
+    DEFAULT_LOG_LEVEL: LogLevel;
     LOCALHOST: string;
     SECRET: string;
 }
@@ -35,7 +35,7 @@ export const configDefault: Config = {
         DIALECT: 'mysql',
         LOGGING: false
     },
-    LOG_LEVEL: 'fatal',
+    DEFAULT_LOG_LEVEL: 'error',
     LOCALHOST: '127.0.0.1',
     SECRET: 'rahasia'
 };

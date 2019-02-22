@@ -1,9 +1,11 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import { createServer } from 'http';
+import { graphql, execute, subscribe } from 'graphql';
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import { PubSub } from 'graphql-subscriptions';
 import { makeExecutableSchema } from 'graphql-tools';
+import { SubscriptionServer } from 'subscriptions-transport-ws';
 import * as cors from 'cors';
 import * as path from 'path';
 import { typeDefs } from './api/typeMerger';
@@ -12,6 +14,8 @@ import { verify, permitMiddleware } from './lib';
 import config from './config';
 const { APP_PORT, LOCALHOST } = config;
 var router = express.Router();
+
+
 
 // Creating Express and defining Public Subscription
 const graphQLServer = express();
@@ -56,15 +60,15 @@ APIServer.listen(APP_PORT, () => {
     console.log(`App is running on http://${LOCALHOST}:${APP_PORT}`);
 
     // Creating GraphQL Subscription Server using WebSocket
-    // const subscriptionServer = SubscriptionServer.create(
-    //     {
-    //         schema,
-    //         execute,
-    //         subscribe,
-    //     },
-    //     {
-    //         server: APIServer,
-    //         path: '/subscriptions',
-    //     },
-    // );
+    const subscriptionServer = SubscriptionServer.create(
+        {
+            schema,
+            execute,
+            subscribe,
+        },
+        {
+            server: APIServer,
+            path: '/subscriptions',
+        },
+    );
 });

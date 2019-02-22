@@ -2,16 +2,24 @@ import { Users, Role } from '../api/models';
 import * as crypto from 'crypto-js';
 import * as moment from 'moment';
 import { getToken } from '../lib/token';
+import { endpointLogger } from '../lib/logger';
+
 
 module.exports = function (app: any, router: any) {
     router.post('/login', async function (req: any, res: any) {
+        endpointLogger.debug('===Received Request===');
+        endpointLogger.debug(req.body);
+
+        // Find user with matching username
         var user = await Users.findOne({
             where: {
                 username: req.body.username,
             }
         });
 
+        // Return failed status when user not found
         if ( !user  ) {
+            endpointLogger.warn('User Not Found');
             res.json({
               status: 'Failed',
               message: 'User Not Found',
@@ -19,8 +27,11 @@ module.exports = function (app: any, router: any) {
             });
         }
 
+        // Encrypt user password
         var password = await crypto.SHA256(req.body.password).toString();
+        endpointLogger.trace('Encrypted Password: ' + password);
 
+        // Create token payload
         var payload = await Users.findOne({
             attributes: ['id', 'username'],
             where: {
@@ -33,8 +44,11 @@ module.exports = function (app: any, router: any) {
             },
             raw: true
         });
+        endpointLogger.trace('===Token Payload===');
+        endpointLogger.trace(payload);
 
         if ( !payload  ) {
+            endpointLogger.warn('Mismatch Password, Payload not Generated');
             res.json({
               status: 'Failed',
               message: 'Wrong Password',
@@ -42,52 +56,23 @@ module.exports = function (app: any, router: any) {
             });
         }
 
+        // Create token with defined payload
         var token = await getToken(payload);
 
+        // Set time for last_login logging
         var time = moment().format();
 
+        // Update last_login on user table
         Users.update({
             last_login: time
         }, { where: {username: req.body.username} });
 
+        // Respond to the front end with token attached
+        endpointLogger.warn('Token Sent!');
         res.json({
             status: 'Success',
             message: 'Enjoy your token',
             token: token
-        });
-    });
-
-    router.post('/forgetPassword', async function (req: any, res: any) {
-        var user = await Users.findOne({
-            where: {
-                username: req.body.username,
-            }
-        });
-
-        if ( !user  ) {
-            res.json({
-              status: 'Failed',
-              message: 'User Not Found'
-            });
-        }
-
-        var password = await crypto.SHA256(req.body.password).toString();
-
-        return Users.update({
-            password: password
-        }, { where: { username: req.body.username } })
-        .then((response) => {
-            if (response[0] === 1) {
-                return res.status(200).json({
-                    code: '200',
-                    message: 'OK'
-                });
-            } else {
-                return res.status(400).json({
-                    code: '400',
-                    message: 'Password Failed to Update'
-                });
-            }
         });
     });
 

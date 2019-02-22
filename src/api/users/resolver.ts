@@ -1,22 +1,34 @@
 import { Users } from '../models';
 import * as crypto from 'crypto-js';
+import { resolverLogger } from '../../lib/logger';
 export const usersResolver = {
 
     Query: {
 
         usersAll(_: any, args: any) {
+            resolverLogger.trace('===Attached Arguments===');
+            resolverLogger.trace(args);
+
             return Users.findAll({ where: { is_deleted: false } });
         },
 
         usersById(_: any, args: any) {
+            resolverLogger.trace('===Attached Arguments===');
+            resolverLogger.trace(args);
+
             return Users.findOne({ where: { id: args.id, is_deleted: false } });
         }
     },
 
     Mutation: {
         async createUsers(_: any, args: any, context: any) {
+            resolverLogger.trace('===Attached Arguments===');
+            resolverLogger.trace(args);
+            resolverLogger.trace('===Attached Context===');
+            resolverLogger.trace(context);
 
             var password = await crypto.SHA256(args.password).toString();
+            resolverLogger.trace('Encrypted Password: ' + password);
 
             return Users.create({
                 role_id: args.role_id,
@@ -31,8 +43,13 @@ export const usersResolver = {
         },
 
         async updateUsers(_: any, args: any, context: any) {
+            resolverLogger.trace('===Attached Arguments===');
+            resolverLogger.trace(args);
+            resolverLogger.trace('===Attached Context===');
+            resolverLogger.trace(context);
 
             var password = await crypto.SHA256(args.password).toString();
+            resolverLogger.trace('Encrypted Password: ' + password);
 
             return Users.update({
                 role_id: args.role_id,
@@ -45,6 +62,11 @@ export const usersResolver = {
         },
 
         async deleteUsers(_: any, args: any, context: any) {
+            resolverLogger.trace('===Attached Arguments===');
+            resolverLogger.trace(args);
+            resolverLogger.trace('===Attached Context===');
+            resolverLogger.trace(context);
+
             let data = await Users.findOne({ where: { id: args.id, is_deleted: false } });
 
             if (!data) {
@@ -74,8 +96,13 @@ export const usersResolver = {
         },
 
         async updatePassword(_: any, args: any, context: any) {
+            resolverLogger.trace('===Attached Arguments===');
+            resolverLogger.trace(args);
+            resolverLogger.trace('===Attached Context===');
+            resolverLogger.trace(context);
 
             var password = await crypto.SHA256(args.password).toString();
+            resolverLogger.trace('Encrypted Password: ' + password);
 
             return Users.update({
                 password: password,

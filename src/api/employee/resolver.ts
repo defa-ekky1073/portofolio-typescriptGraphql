@@ -1,19 +1,29 @@
 import { Employee } from '../models';
+import { resolverLogger } from '../../lib/logger';
 export const employeeResolver = {
 
     Query: {
 
         employeeAll(_: any, args: any) {
+            resolverLogger.trace('===Attached Arguments===');
+            resolverLogger.trace(args);
             return Employee.findAll({ where: { is_deleted: false } });
         },
 
         employeeById(_: any, args: any) {
+            resolverLogger.trace('===Attached Arguments===');
+            resolverLogger.trace(args);
             return Employee.findOne({ where: { id: args.id, is_deleted: false } });
         }
     },
 
     Mutation: {
         createEmployee(_: any, args: any, context: any) {
+            resolverLogger.trace('===Attached Arguments===');
+            resolverLogger.trace(args);
+            resolverLogger.trace('===Attached Context===');
+            resolverLogger.trace(context);
+
             return Employee.create({
                 id_number: args.id_number,
                 name: args.name,
@@ -32,6 +42,11 @@ export const employeeResolver = {
         },
 
         updateEmployee(_: any, args: any, context: any) {
+            resolverLogger.trace('===Attached Arguments===');
+            resolverLogger.trace(args);
+            resolverLogger.trace('===Attached Context===');
+            resolverLogger.trace(context);
+
             return Employee.update({
                 id_number: args.id_number,
                 name: args.name,
@@ -48,6 +63,11 @@ export const employeeResolver = {
         },
 
         async deleteEmployee(_: any, args: any, context: any) {
+            resolverLogger.trace('===Attached Arguments===');
+            resolverLogger.trace(args);
+            resolverLogger.trace('===Attached Context===');
+            resolverLogger.trace(context);
+
             let data = await Employee.findOne({ where: { id: args.id, is_deleted: false } });
 
             if (!data) {

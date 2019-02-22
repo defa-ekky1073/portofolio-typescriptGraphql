@@ -1,19 +1,28 @@
 import { Company } from '../models';
+import { resolverLogger } from '../../lib';
 export const companyResolver = {
 
     Query: {
 
         companyAll(_: any, args: any) {
+            resolverLogger.trace('===Attached Arguments===');
+            resolverLogger.trace(args);
             return Company.findAll({ where: { is_deleted: false } });
         },
 
         companyById(_: any, args: any) {
+            resolverLogger.trace('===Attached Arguments===');
+            resolverLogger.trace(args);
             return Company.findOne({ where: { id: args.id, is_deleted: false } });
         }
     },
 
     Mutation: {
         createCompany(_: any, args: any, context: any) {
+            resolverLogger.trace('===Attached Arguments===');
+            resolverLogger.trace(args);
+            resolverLogger.trace('===Attached Context===');
+            resolverLogger.trace(context);
             return Company.create({
                 name: args.name,
                 address: args.address,
@@ -27,6 +36,10 @@ export const companyResolver = {
         },
 
         updateCompany(_: any, args: any, context: any) {
+            resolverLogger.trace('===Attached Arguments===');
+            resolverLogger.trace(args);
+            resolverLogger.trace('===Attached Context===');
+            resolverLogger.trace(context);
             return Company.update({
                 name: args.name,
                 address: args.address,
@@ -38,6 +51,11 @@ export const companyResolver = {
         },
 
         async deleteCompany(_: any, args: any, context: any) {
+            resolverLogger.trace('===Attached Arguments===');
+            resolverLogger.trace(args);
+            resolverLogger.trace('===Attached Context===');
+            resolverLogger.trace(context);
+
             let data = await Company.findOne({ where: { id: args.id, is_deleted: false } });
 
             if (!data) {

@@ -1,6 +1,6 @@
 {
   "name": "portofolio-project",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "dist/server.js",
   "bin": "dist/server.js",
@@ -12,6 +12,7 @@
     "postbuild": "npm run copy",
     "unit-test": "nyc --reporter=text-summary --reporter=text --reporter=html mocha dist/unitTest --reporter mochawesome --exit",
     "predebug": "npm run build",
+    "debug": "node ./dist/server.js debug | bunyan -o short",
     "prestart": "npm run build",
     "start": "pm2 start dist/server.js --name api-igd -f && pm2 delete api-igd && pm2 start dist/server.js --name api-igd",
     "predev": "npm run clean",
