@@ -10,7 +10,7 @@ import * as cors from 'cors';
 import * as path from 'path';
 import { typeDefs } from './api/typeMerger';
 import { resolvers } from './api/resolverMerger';
-import { verify, permitMiddleware } from './lib';
+import { verify, permitMiddleware, functionLogger } from './lib';
 import config from './config';
 const { APP_PORT, LOCALHOST } = config;
 var router = express.Router();
@@ -58,6 +58,7 @@ const APIServer = createServer(graphQLServer);
 // Creating server listener
 APIServer.listen(APP_PORT, () => {
     console.log(`App is running on http://${LOCALHOST}:${APP_PORT}`);
+    console.log(`Check the status on http://${LOCALHOST}:${APP_PORT}/status`);
 
     // Creating GraphQL Subscription Server using WebSocket
     const subscriptionServer = SubscriptionServer.create(
