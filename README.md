@@ -22,4 +22,4 @@ Portofolio API using Typescript with ECMAScript 2017 (ES8) and GraphQL
 ## Development & Debugging Run
 
 * use `npm run dev` to build the entire project and run it on develop mode
-* use `npm run debug` to build the entire project and run it on develop mode
+* use `npm run debug` to build the entire project and run it on debugging mode
