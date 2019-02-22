@@ -2,7 +2,7 @@
 
 Portofolio API using Typescript with ECMAScript 2017 (ES8) and GraphQL
 
-> Please be aware that this project is still on progress, i will continue to work on it gradually over time. You can check every update that i'll implement on Issues tab.
+> Please be aware that this project is still on progress, i will continue to work on it gradually over time. You can check every update that i'll implement on Issues tab and Issue that i'm currently working on Project Tab.
 > 
 > If you're an employer who want to know my capabilities, feel free to request a feature and submit an issue.
 
