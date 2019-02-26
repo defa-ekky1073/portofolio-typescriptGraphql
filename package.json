@@ -1,6 +1,6 @@
 {
   "name": "portofolio-project",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "main": "dist/server.js",
   "bin": "dist/server.js",
@@ -14,7 +14,7 @@
     "predebug": "npm run build",
     "debug": "node ./dist/server.js debug | bunyan -o short",
     "prestart": "npm run build",
-    "start": "pm2 start dist/server.js --name api-igd -f && pm2 delete api-igd && pm2 start dist/server.js --name api-igd",
+    "start": "nodemon ./dist/server.js | bunyan -o short  ",
     "predev": "npm run clean",
     "dev": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Nodemon\" -c \"blue.bold,magenta.bold\" \"npm run watch-ts\" \"nodemon ./dist/server.js\"",
     "prenodemon": "wait-on dist/server.js",

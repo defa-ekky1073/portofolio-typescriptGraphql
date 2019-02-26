@@ -17,7 +17,14 @@ export const usersResolver = {
             resolverLogger.trace(args);
 
             return Users.findOne({ where: { id: args.id, is_deleted: false } });
-        }
+        },
+
+        viewLoggedUsers(_: any, args: any) {
+            resolverLogger.trace('===Attached Arguments===');
+            resolverLogger.trace(args);
+
+            return Users.findAll({ where: { company_id: args.company_id, is_deleted: false, is_logged: true } });
+        },
     },
 
     Mutation: {
@@ -35,6 +42,7 @@ export const usersResolver = {
                 employee_id: args.employee_id,
                 username: args.username,
                 password: password,
+                is_logged: false,
                 is_active: true,
                 is_deleted: false,
                 created_by: context.res.locals.id,

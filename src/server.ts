@@ -10,7 +10,7 @@ import * as cors from 'cors';
 import * as path from 'path';
 import { typeDefs } from './api/typeMerger';
 import { resolvers } from './api/resolverMerger';
-import { verify, permitMiddleware, functionLogger } from './lib';
+import { verify, permitMiddleware, endpointLogger } from './lib';
 import config from './config';
 const { APP_PORT, LOCALHOST } = config;
 var router = express.Router();
@@ -49,8 +49,22 @@ graphQLServer.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql', subscr
 graphQLServer.use('/status', function (req: any, res: any) {
     res.render(__dirname + `\\views\\landing.ejs`);
 });
+
 // Use external routing module
 require('./routes/auth')(graphQLServer, router);
+
+// Error Handle
+graphQLServer.use((err: any, req: any, res: any, next: any) => {
+
+    // Handle any error thrown from previous middleware
+    endpointLogger.warn('===Entering Error Handler===');
+    endpointLogger.debug('Err Payload: ');
+    endpointLogger.debug(err.stack);
+    res.json({
+        status: 'Failed',
+        message: err.message,
+    });
+});
 
 // Creating Server
 const APIServer = createServer(graphQLServer);

@@ -11,6 +11,7 @@ services:
     environment:
       MASTER_USER: root
       MASTER_HOST: db.docker
+    restart: always
   db:
     image: mariadb
     ports:

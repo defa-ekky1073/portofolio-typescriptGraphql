@@ -1,6 +1,7 @@
 import * as jwt from 'jsonwebtoken';
 import config from '../config';
-import { db, functionLogger } from './index';
+import { functionLogger } from './index';
+import { db } from './db';
 const { SECRET } = config;
 
 /**
@@ -20,6 +21,7 @@ function getToken(payload: any) {
 
 /**
  * Middleware function to verify provided token on request header
+ * Used on GraphQL endpoint
  * @param req for any request on routing
  * @param res form any response on routing
  * @param next to proceed to next middleware on routing
@@ -28,15 +30,19 @@ function verify(req: any, res: any, next: any) {
 
     return Promise.resolve()
     // Get authorization token from header
-    .then(() => req.get('Bearer'))
+    .then(() => req.get('Authorization'))
     .then((token) => {
-
 
         // function return no access message if no token is provided
         if (!token) {
             functionLogger.warn('No Token');
             throw 'Unauthorized Access';
         }
+
+        return token.split(' ');
+    })
+    .then(([bearer, token]) => {
+
         // verify the provided token
         return jwt.verify(token, SECRET);
     })
@@ -88,14 +94,15 @@ function verify(req: any, res: any, next: any) {
 
     // throw "No Access" message if function catching an error
     .catch((err) => {
-        functionLogger.error('Err');
+        functionLogger.error(err);
         return res.status(400)
         .json({message: err || 'You have no access.'});
     });
 }
 
 /**
- * Middleware function to verify provided token on request header
+ * Middleware function to authenticate token on request header for endpoint entry
+ * Used on RESTful endpoints
  * @param req for any request on routing
  * @param res form any response on routing
  * @param next to proceed to next middleware on routing
@@ -104,7 +111,7 @@ function authenticate(req: any, res: any, next: any) {
 
     return Promise.resolve()
     // Get authorization token from header
-    .then(() => req.get('Bearer'))
+    .then(() => req.get('Authorization'))
     .then((token) => {
 
         // function return no access message if no token is provided
@@ -112,6 +119,11 @@ function authenticate(req: any, res: any, next: any) {
             functionLogger.warn('No Token');
             throw 'Unauthorized Access';
         }
+
+        return token.split(' ');
+    })
+    .then(([bearer, token]) => {
+
         // verify the provided token
         return jwt.verify(token, SECRET);
     })
@@ -176,31 +188,9 @@ function authenticate(req: any, res: any, next: any) {
     });
 }
 
-// function permit(req: any, res: any) {
-
-//     return Promise.resolve()
-//     .then(() => req.body.query.split(/[{(]/))
-//     .then((query) => {
-
-//         let access = {
-//             path: query[1].trim(),
-//             can_access: true
-//         };
-
-//         if (res.locals.permission.includes(JSON.stringify(access))) {
-//             return [ true, ''];
-//         } else {
-//             return [ false, `You have no access to this ${query[0].trim()}`];
-//         }
-//     }).catch((err) => {
-//         console.log(err);
-//         return { message: err };
-//     });
-
-// }
-
 /**
- * Function to access permission of current action to be executed
+ * Function to access permission of current queries to be executed
+ * Used exclusively on GraphQL endpoint
  * @param req Request paramater from express routing
  * @param res Response parameter from express routing
  * @param next Next parameter for next middleware
@@ -212,14 +202,19 @@ function permitMiddleware(req: any, res: any, next: any) {
         functionLogger.trace('===Sent Query===');
         functionLogger.trace(req.body.query);
     })
-    .then(() => req.body.query.trim().split(/[\W](\W*)/g, 3))
+    .then(() => req.body.query.trim().split(/[\W](\W*)/g, 10))
     .then((query) => {
+        functionLogger.trace('===Splitted Query===');
+        functionLogger.trace(query);
 
         // Combine path and can access value for comparison variable
         let access = {
             path: query[2].trim(),
-            can_access: true
+            can_access: 1
         };
+
+        functionLogger.debug('===Current Access===');
+        functionLogger.debug(access);
 
         if (res.locals.permission.includes(JSON.stringify(access))) {
             functionLogger.warn('Query Access Granted');

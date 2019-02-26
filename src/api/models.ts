@@ -9,9 +9,11 @@ const UserModel = db.define('users', {
     id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
     role_id: { type: Sequelize.INTEGER, foreignKey: true, NULL: false },
     employee_id: { type: Sequelize.INTEGER, foreignKey: true, NULL: false },
+    company_id: { type: Sequelize.INTEGER, foreignKey: true, NULL: false },
     username: { type: Sequelize.STRING },
     password: { type: Sequelize.STRING },
     last_login: { type: Sequelize.DATE },
+    is_logged: { type: Sequelize.BOOLEAN },
     is_active: { type: Sequelize.BOOLEAN },
     is_deleted: { type: Sequelize.BOOLEAN },
     created_by: { type: Sequelize.INTEGER },
@@ -49,6 +51,7 @@ const CompanyModel = db.define('company', {
 
 const EmployeeModel = db.define('employee', {
     id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
+    company_id: { type: Sequelize.INTEGER, foreignKey: true },
     id_number: { type: Sequelize.STRING },
     name: { type: Sequelize.STRING },
     birth_place: { type: Sequelize.STRING },
@@ -69,6 +72,12 @@ db.sync();
 // Model Relation
 // Model1.belongsTo(Model2, {foreignKey: 'columnName'});
 UserModel.belongsTo(RoleModel);
+UserModel.belongsTo(EmployeeModel);
+UserModel.belongsTo(CompanyModel);
+EmployeeModel.belongsTo(CompanyModel);
+CompanyModel.hasMany(EmployeeModel);
+CompanyModel.hasMany(UserModel);
+
 
 // Export defined models
 const Users = db.models.users;

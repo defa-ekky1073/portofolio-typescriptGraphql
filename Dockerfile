@@ -1,12 +1,13 @@
 FROM node:alpine
 
-RUN mkdir /appigdri
-WORKDIR /appigdri
+RUN mkdir /porto
+WORKDIR /porto
 
-COPY package.json /appigdri
+COPY package.json /porto
 RUN npm install
 
 COPY . /appigdri
 EXPOSE 3030
 
-CMD ["npm", "start"]
+ENTRYPOINT ["npm", "run"]
+CMD [ "start" ]
