@@ -16,7 +16,18 @@ Portofolio API using Typescript with ECMAScript 2017 (ES8) and GraphQL
 
 * After cloning the project into your local workspace, use `npm install` to install all dependencies
 * Import portofolio database on `./database` directory to local MySQL database
+
+## Project Build
+* Build the entire project by `npm run build`
+* If you decide to build binary files, run `npm run binary-win` for windows or `npm run binary-linux` for linux after building the entire project
+
+## Configuration
+* Configure the application configuration by editting `.portofoliorc` files
+* If you decide to create binary build, you can copy `.portofoliorc` to your binary directory and rename it to `portofolio.config.json`
+
+## Starting the API
 * Run the API on your local workspace by `npm start`
+* If you using binary build, simple execute it
 * Go to `localhost:5000/status` or [Click Here](http://localhost:5000/status) to check if the service has been liftoff
 
 ## Development & Debugging Run

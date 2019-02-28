@@ -16,7 +16,6 @@ const { APP_PORT, LOCALHOST } = config;
 var router = express.Router();
 
 
-
 // Creating Express and defining Public Subscription
 const graphQLServer = express();
 const pubSub = new PubSub();

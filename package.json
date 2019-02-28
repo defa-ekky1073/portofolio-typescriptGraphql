@@ -13,7 +13,6 @@
     "unit-test": "nyc --reporter=text-summary --reporter=text --reporter=html mocha dist/unitTest --reporter mochawesome --exit",
     "predebug": "npm run build",
     "debug": "node ./dist/server.js debug | bunyan -o short",
-    "prestart": "npm run build",
     "start": "nodemon ./dist/server.js | bunyan -o short  ",
     "predev": "npm run clean",
     "dev": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Nodemon\" -c \"blue.bold,magenta.bold\" \"npm run watch-ts\" \"nodemon ./dist/server.js\"",
@@ -24,8 +23,8 @@
     "test:dev": "tsc -w -p test/tsconfig.json",
     "test": "nyc --reporter=text-summary --reporter=text --reporter=html mocha test/build/index.js --reporter mochawesome --exit",
     "lint": "tslint -c tslint.json -p tsconfig.json",
-    "binary": "pkg . --target latest-linux-x64 --out-path ./bin",
-    "binary-dev": "pkg . --out-path ./bin",
+    "binary-linux": "pkg . --target latest-linux-x64 --out-path ./bin",
+    "binary-win": "pkg . --out-path ./bin",
     "docs": "typedoc --name \"Portofolio API\" --readme README.md --target ES5 --out public src"
   },
   "pkg": {

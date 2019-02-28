@@ -1,0 +1,17 @@
+{
+    // Set application port
+    "APP_PORT": 5000,
+
+    // Set database option
+    "DATABASE": {
+        "HOST": "127.0.0.1",
+        "PORT": 3306,
+        "DB": "portofolio",
+        "USERNAME": "root",
+        "PASSWORD": "",
+        "DIALECT": "mysql"
+    },
+
+    // Set JWT secret
+    "SECRET": "rahasia"
+}

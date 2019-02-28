@@ -3,13 +3,14 @@ import * as process from 'process';
 import { join, dirname, resolve } from 'path';
 import { existsSync, readFileSync, readFile } from 'fs';
 import { LogLevel } from 'bunyan';
+import { functionLogger } from './lib';
 
 /**
  * Interface for config
  */
 export interface Config {
     APP_PORT: number;
-    SEQUELIZE: {
+    DATABASE: {
         HOST: string;
         PORT: number;
         DB: string;
@@ -26,7 +27,7 @@ export interface Config {
 // Setting default config in case .json config doesn't exist
 export const configDefault: Config = {
     APP_PORT: 5000,
-    SEQUELIZE: {
+    DATABASE: {
         HOST: '127.0.0.1',
         PORT: 3306,
         DB: 'portofolio',
